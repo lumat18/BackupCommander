@@ -32,7 +32,7 @@ public class LogManager {
         Path logPath = Path.of(repo + "\\log.txt");
         if (repoExist(repoPath)) {
             if (logFileExist(logPath)) {
-                saveLog(repo+"\\log.txt", createLog());
+                saveLog(repo+"\\log.txt", Logger.createNewLog());
             } else {
                 try {
                     Files.createFile(logPath);
@@ -40,15 +40,11 @@ public class LogManager {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                saveLog(repo+"\\log.txt", createLog());
+                saveLog(repo+"\\log.txt", Logger.createNewLog());
             }
         } else {
             System.out.println("You have to create repo first");
         }
-    }
-
-    private static Log createLog() {
-        return new Log();
     }
 
     private static void saveLog(String logPath, Log log){

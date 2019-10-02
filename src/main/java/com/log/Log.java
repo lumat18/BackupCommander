@@ -11,34 +11,21 @@ public class Log {
     private String description;
     private String dateTime;
     private String hashcode;
-    private static Scanner scanner = new Scanner(System.in);
 
-    public Log() {
-        this.user = getUserName();
-        this.description = getDescription();
-        this.dateTime = generateDateTime();
-        this.hashcode = generateHashcode();
+    public void setUser(String user) {
+        this.user = user;
     }
 
-    private static String generateHashcode() {
-        SecureRandom secureRandom = new SecureRandom();
-        byte[] token = new byte[3];
-        secureRandom.nextBytes(token);
-        return new BigInteger(1, token).toString(16);
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    private static String generateDateTime() {
-        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm"));
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
     }
 
-    private static String getUserName() {
-        System.out.println("Enter user name:");
-        return scanner.nextLine();
-    }
-
-    private static String getDescription() {
-        System.out.println("Enter backup description:");
-        return scanner.nextLine();
+    public void setHashcode(String hashcode) {
+        this.hashcode = hashcode;
     }
 
     @Override
