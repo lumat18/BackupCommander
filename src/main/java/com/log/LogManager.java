@@ -1,6 +1,7 @@
 package com.log;
 
 import com.repository.RepoManager;
+import com.saver.FileManager;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -56,9 +57,8 @@ public class LogManager {
             Writer writer = new BufferedWriter(new FileWriter(logPath, true));
             writer.append(log.toString());
             writer.close();
-            //
-            //MIEJSCE NA METODĘ OD GRZESIA!!!!
-            //
+
+            FileManager.fileSaver(log.getHashcode());
 
             System.out.println("New backup version created");
         } catch (IOException e) {

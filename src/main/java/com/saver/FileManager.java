@@ -13,21 +13,24 @@ import java.util.Set;
 public class FileManager {
     public static void fileSaver(String hashcode){
         String workingDirectory = RepoManager.repo.getDirectoryPath().toString();
-        File srcFile = new File(workingDirectory.replace("/.repo", ""));
+        String srcDirectory = workingDirectory.replace("\\.repo", "");
+        System.out.println(srcDirectory);
+        File srcFile = new File(srcDirectory);
         File dstFile = new File(workingDirectory + "/" + hashcode);
 
         try {
-            copyDir(srcFile, dstFile);
+            copyDir(srcFile, dstFile, srcDirectory);
         } catch (IOException e) {
             System.out.println(e);
         }
     }
 
-    public static void copyDir(File srcFile, File dstFile) throws IOException {
+    public static void copyDir(File srcFile, File dstFile, String srcDir) throws IOException {
+        File repoDir = new File(srcDir);
         FileFilter repoFilter = new FileFilter() {
             @Override
             public boolean accept(File pathname) {
-                if(pathname.equals(dstFile)){
+                if(pathname.equals(repoDir)){
                     return false;
                 }
                 else {
