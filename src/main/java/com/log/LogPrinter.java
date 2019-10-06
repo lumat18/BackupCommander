@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class LogPrinter {
+    //this class is printing the content of the log.txt file that is in the .repo directory
+
     private static  List<String> log = new ArrayList<>();
     private static Scanner scanner = new Scanner(System.in);
     private static Path repoPath = Path.of("C:\\Users\\Łukasz Matuszewski\\Desktop\\MyBook\\.repo");

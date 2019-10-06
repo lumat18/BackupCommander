@@ -7,6 +7,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class Logger {
+    //This class is setting up the new log object
+
     private static Scanner scanner = new Scanner(System.in);
 
     public static Log createNewLog() {

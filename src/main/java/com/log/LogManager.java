@@ -6,6 +6,8 @@ import java.nio.file.Path;
 import java.util.Scanner;
 
 public class LogManager {
+    //this class creates log.txt file and writes log object into it
+
     private static Scanner scanner = new Scanner(System.in);
 
     public static void commitBackupVersion() {
@@ -52,6 +54,10 @@ public class LogManager {
             Writer writer = new BufferedWriter(new FileWriter(logPath, true));
             writer.append(log.toString());
             writer.close();
+            //
+            //MIEJSCE NA METODĘ OD GRZESIA!!!!
+            //
+            System.out.println("New backup version created");
         } catch (IOException e) {
             e.printStackTrace();
         }
