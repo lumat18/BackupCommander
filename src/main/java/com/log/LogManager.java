@@ -1,5 +1,7 @@
 package com.log;
 
+import com.repository.RepoManager;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,7 +18,7 @@ public class LogManager {
         while (!finish) {
             switch (scanner.nextLine().toLowerCase()) {
                 case "y":
-                    logExistOrCreateFile("C:\\Users\\Łukasz Matuszewski\\Desktop\\MyBook\\.repo");
+                    logExistOrCreateFile(RepoManager.repo.getDirectoryPath().toString());
                     finish=true;
                     break;
                 case "n":
@@ -57,6 +59,7 @@ public class LogManager {
             //
             //MIEJSCE NA METODĘ OD GRZESIA!!!!
             //
+
             System.out.println("New backup version created");
         } catch (IOException e) {
             e.printStackTrace();

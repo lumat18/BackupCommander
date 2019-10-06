@@ -28,6 +28,10 @@ public class Log {
         this.hashcode = hashcode;
     }
 
+    public String getHashcode() {
+        return hashcode;
+    }
+
     @Override
     public String toString() {
         return this.hashcode + ";" +
