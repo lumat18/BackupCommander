@@ -1,3 +1,7 @@
+import com.log.LogManager;
+import com.log.LogPrinter;
+import com.repository.RepoManager;
+
 import java.util.Scanner;
 
 public class MainMenu {
@@ -21,6 +25,15 @@ public class MainMenu {
                 case "2":
                     credits();
                     break;
+                case "3":
+                    LogManager.commitBackupVersion();
+                    break;
+                case "4":
+                    LogPrinter.printLog();
+                    break;
+                case "5":
+                    RepoManager.startRepoManager();
+                    break;
                 default:
                     System.out.println("Invalid instruction");
                     printInstructions();
@@ -33,6 +46,9 @@ public class MainMenu {
         System.out.println("[0] - quit");
         System.out.println("[1] - print instructions");
         System.out.println("[2] - credits");
+        System.out.println("[3] - create backup version");
+        System.out.println("[4] - print backup log");
+        System.out.println("[5] - initialize repo");
     }
     public static void credits(){
         System.out.println("Here credits");

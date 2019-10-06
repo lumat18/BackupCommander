@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class RepoManager {
+    public static Repo repo;
 
     //    Maybe inlcude list of repos? To be discussed.
     //    List<Repo> repoList = new ArrayList<>();
@@ -40,13 +41,12 @@ public class RepoManager {
 
 
     private static void repoInit() {
-        String directory;
+        String workingDirectory;
         String name;
         Path directoryPath;
-        Repo repo;
-        System.out.println("Please state how would you like to create a directory:");
+        System.out.println("Please state how would you like to create a workingDirectory:");
         System.out.println("[1] - Name a full path.");
-        System.out.println("[2] - Name directory elements.");
+        System.out.println("[2] - Name workingDirectory elements.");
         Scanner scanner = new Scanner(System.in);
         int choice = scanner.nextInt();
         switch (choice) {
@@ -55,9 +55,9 @@ public class RepoManager {
                 do {
                     try {
                         Scanner scanner1 = new Scanner(System.in);
-                        directory = scanner1.nextLine();
-                        directory += "/.repo";
-                        directoryPath = Paths.get(directory);
+                        workingDirectory = scanner1.nextLine();
+                        workingDirectory += "/.repo";
+                        directoryPath = Paths.get(workingDirectory);
                         break;
                     } catch (Exception e) {
                         System.out.println("Invalid path.");
@@ -69,8 +69,8 @@ public class RepoManager {
                 break;
 
             case 2:
-                System.out.println("Please enter directory elements. Press enter after each element to confirm. Type [-] to finish.");
-                directory = "";
+                System.out.println("Please enter workingDirectory elements. Press enter after each element to confirm. Type [-] to finish.");
+                workingDirectory = "";
                 do {
                     Scanner scanner1 = new Scanner(System.in);
                     String temp = scanner1.nextLine();
@@ -78,12 +78,12 @@ public class RepoManager {
                         break;
                     } else {
                         //Maybe change this for a more optimal method like StringBuffer.append()?
-                        directory += temp;
-                        directory += "/";
+                        workingDirectory += temp;
+                        workingDirectory += "/";
                     }
                 } while (true);
-                directory += ".repo";
-                directoryPath = Paths.get(directory);
+                workingDirectory += ".repo";
+                directoryPath = Paths.get(workingDirectory);
                 name = setRepoName();
                 repo = new Repo(name, directoryPath);
                 break;
