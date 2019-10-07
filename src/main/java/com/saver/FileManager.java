@@ -14,7 +14,7 @@ public class FileManager {
     public static void fileSaver(String hashcode){
         String workingDirectory = RepoManager.repo.getDirectoryPath().toString();
         String srcDirectory = workingDirectory.replace("\\.repo", "");
-        System.out.println(srcDirectory);
+        
         File srcFile = new File(srcDirectory);
         File dstFile = new File(workingDirectory + "/" + hashcode);
 
