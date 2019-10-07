@@ -1,3 +1,4 @@
+import com.loader.BackupLoader;
 import com.log.LogManager;
 import com.log.LogPrinter;
 import com.repository.RepoManager;
@@ -34,6 +35,8 @@ public class MainMenu {
                 case "5":
                     RepoManager.startRepoManager();
                     break;
+                case "6":
+                    BackupLoader.chooseBackup();
                 default:
                     System.out.println("Invalid instruction");
                     printInstructions();
@@ -49,6 +52,7 @@ public class MainMenu {
         System.out.println("[3] - create backup version");
         System.out.println("[4] - print backup log");
         System.out.println("[5] - initialize repo");
+        System.out.println("[6] - choose backup and load it");
     }
     public static void credits(){
         System.out.println("Here credits");

@@ -12,6 +12,16 @@ public class Log {
     private String dateTime;
     private String hashcode;
 
+    public Log() {
+    }
+
+    public Log(String hashcode, String dateTime, String user, String description) {
+        this.user = user;
+        this.description = description;
+        this.dateTime = dateTime;
+        this.hashcode = hashcode;
+    }
+
     public void setUser(String user) {
         this.user = user;
     }
