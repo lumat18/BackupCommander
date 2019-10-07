@@ -19,7 +19,7 @@ public class FileManager {
         File dstFile = new File(workingDirectory + "/" + hashcode);
 
         try {
-            copyDir(srcFile, dstFile, srcDirectory);
+            copyDir(srcFile, dstFile, workingDirectory);
         } catch (IOException e) {
             System.out.println(e);
         }
