@@ -41,12 +41,11 @@ public class RepoManager {
 
     private static void repoInit() {
         String workingDirectory;
-        String name;
         Path directoryPath;
 
         System.out.println("Please state how would you like to create a directory:");
         System.out.println("[1] - Name a full path.");
-        System.out.println("[2] - Name workingDirectory elements.");
+        System.out.println("[2] - Name Directory elements.");
         Scanner scanner = new Scanner(System.in);
         int choice = scanner.nextInt();
         switch (choice) {
@@ -65,8 +64,7 @@ public class RepoManager {
                         RepoMessages.fullPathInstructions();
                     }
                 } while (true);
-                name = setRepoName();
-                repo = new Repo(name, directoryPath);
+                repo = new Repo(directoryPath);
                 break;
 
             case 2:
@@ -85,12 +83,11 @@ public class RepoManager {
                 } while (true);
                 workingDirectory += ".repo";
                 directoryPath = Paths.get(workingDirectory);
-                name = setRepoName();
-                repo = new Repo(name, directoryPath);
+                repo = new Repo(directoryPath);
                 break;
             default:
                 //to be improved in a future release
-                repo = new Repo("broken repo - wrong choice", null);
+                System.out.println("wrong choice");
         }
         try {
             existsOrCreate(repo.getDirectoryPath());
@@ -99,11 +96,11 @@ public class RepoManager {
         }
     }
 
-    private static String setRepoName() {
-        System.out.println("Please enter repository name:");
-        Scanner scanner = new Scanner(System.in);
-        return scanner.nextLine();
-    }
+//    private static String setRepoName() {
+//        System.out.println("Please enter repository name:");
+//        Scanner scanner = new Scanner(System.in);
+//        return scanner.nextLine();
+//    }
 
     private static void existsOrCreate(Path path) throws IOException {
         //Throws exception if a path parent directory does not exist. To be improved in future release.
