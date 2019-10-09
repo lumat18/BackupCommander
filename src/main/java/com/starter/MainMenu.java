@@ -1,5 +1,8 @@
+package com.starter;
+
 import com.log.LogManager;
 import com.log.LogPrinter;
+import com.repository.Directories;
 import com.repository.RepoManager;
 
 import java.util.Scanner;
@@ -10,6 +13,7 @@ public class MainMenu {
 
     public static void start(){
         boolean quit = false;
+        Directories.directoryInit();
         printInstructions();
         while (!quit){
             System.out.println("Choose what to do:");
@@ -32,7 +36,7 @@ public class MainMenu {
                     LogPrinter.printLog();
                     break;
                 case "5":
-                    RepoManager.startRepoManager();
+                    RepoManager.repoInit();
                     break;
                 default:
                     System.out.println("Invalid instruction");

@@ -1,7 +1,4 @@
-import com.saver.FileManager;
-
-import java.io.File;
-import java.io.IOException;
+package com.starter;
 
 public class Start {
 
