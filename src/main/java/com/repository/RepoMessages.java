@@ -2,9 +2,9 @@ package com.repository;
 
 class RepoMessages {
     static void startingInstructions() {
-        System.out.println("Instructions: ");
-        System.out.println("[1] - to set up a working directory.");
-        System.out.println("[2] - to roll back to starting screen.");
+        System.out.println("Please state how would you like to create a directory ([1] by default):");
+        System.out.println("[1] - Name a full path.");
+        System.out.println("[2] - Name Directory elements.");
     }
     static void fullPathInstructions(){
         System.out.println("Sample directory (for formatting purposes):");
