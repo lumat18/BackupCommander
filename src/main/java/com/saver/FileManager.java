@@ -1,5 +1,6 @@
 package com.saver;
 
+import com.repository.Directories;
 import com.repository.RepoManager;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FalseFileFilter;
@@ -12,8 +13,8 @@ import java.util.Set;
 
 public class FileManager {
     public static void fileSaver(String hashcode){
-        String workingDirectory = RepoManager.repo.getDirectoryPath().toString();
-        String srcDirectory = workingDirectory.replace("\\.repo", "");
+        String workingDirectory = Directories.getRepoDir();
+        String srcDirectory = Directories.getWorkingDir();
         
         File srcFile = new File(srcDirectory);
         File dstFile = new File(workingDirectory + "/" + hashcode);

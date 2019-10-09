@@ -9,15 +9,12 @@ public class Directories {
     public static String getWorkingDir() {
         return workingDir;
     }
-
     public static void setWorkingDir(String workingDir) {
         Directories.workingDir = workingDir;
     }
-
     public static String getRepoDir() {
         return repoDir;
     }
-
     public static void setRepoDir(String repoDir) {
         Directories.repoDir = repoDir;
     }
@@ -39,6 +36,7 @@ public class Directories {
                     try {
                         Scanner scanner1 = new Scanner(System.in);
                         workingDirectory = scanner1.nextLine();
+                        Directories.setWorkingDir(workingDirectory);
                         workingDirectory += "/.repo";
                         Directories.setRepoDir(workingDirectory);
                         break;
@@ -61,7 +59,7 @@ public class Directories {
                         workingDirectory += temp + "/";
                     }
                 } while (true);
-
+                Directories.setWorkingDir(workingDirectory);
                 workingDirectory += ".repo";
                 Directories.setRepoDir(workingDirectory);
                 break;
