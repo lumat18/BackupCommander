@@ -1,5 +1,6 @@
 package com.log;
 
+import com.repository.Directories;
 import com.repository.RepoManager;
 import com.saver.FileManager;
 
@@ -19,7 +20,7 @@ public class LogManager {
         while (!finish) {
             switch (scanner.nextLine().toLowerCase()) {
                 case "y":
-                    logExistOrCreateFile(RepoManager.repo.getDirectoryPath().toString());
+                    logExistOrCreateFile(Directories.getRepoDir());
                     finish=true;
                     break;
                 case "n":
