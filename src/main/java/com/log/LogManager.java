@@ -1,5 +1,6 @@
 package com.log;
 
+import com.Threads.CopyMessage;
 import com.repository.Directories;
 import com.repository.RepoManager;
 import com.saver.FileManager;
@@ -54,13 +55,14 @@ public class LogManager {
     }
 
     private static void saveLog(String logPath, Log log){
+        CopyMessage copyMessage = new CopyMessage();
         try {
             Writer writer = new BufferedWriter(new FileWriter(logPath, true));
             writer.append(log.toString());
             writer.close();
-
+            copyMessage.start();
             FileManager.fileSaver(log.getHashcode());
-
+            copyMessage.stop();
             System.out.println("New backup version created");
         } catch (IOException e) {
             e.printStackTrace();
