@@ -1,5 +1,7 @@
 package com.log;
 
+import com.repository.Directories;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -14,10 +16,11 @@ public class LogPrinter {
 
     private static  List<String> log = new ArrayList<>();
     private static Scanner scanner = new Scanner(System.in);
-    private static Path repoPath = Path.of("C:\\Users\\Łukasz Matuszewski\\Desktop\\MyBook\\.repo");
+    private static Path repoPath = Path.of(Directories.getRepoDir());
 
     public static void printLog() {
         boolean finish = false;
+        readLogFile(repoPath);
         while(!finish){
             System.out.println("What kind of log would you like to print? [F] - full, [S] - simple");
             switch (scanner.nextLine().toUpperCase()) {
@@ -33,10 +36,10 @@ public class LogPrinter {
                     System.out.println("Wrong key");
             }
         }
+        log.clear();
     }
 
     private static void printFullLog() {
-        readLogFile(repoPath);
         log.stream().forEach(x-> {
             for (int i = 0; i < 4; i++) {
                 System.out.print(x.split(";")[i] + "  ");
@@ -46,7 +49,6 @@ public class LogPrinter {
     }
 
     private static void printSimpleLog() {
-        readLogFile(repoPath);
         log.stream().forEach(x->{
             System.out.println(x.split(";")[0] + " - " + x.split(";")[3]);
         });

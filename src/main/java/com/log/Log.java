@@ -13,7 +13,7 @@ public class Log {
     private String dateTime;
     private String hashcode;
 
-    public Log(String user, String description, String dateTime, String hashcode) {
+    public Log(String hashcode,  String dateTime, String user, String description) {
         this.user = user;
         this.description = description;
         this.dateTime = dateTime;
