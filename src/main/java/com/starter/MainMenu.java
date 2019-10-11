@@ -6,6 +6,9 @@ import com.log.LogPrinter;
 import com.repository.Directories;
 import com.repository.RepoManager;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class MainMenu {
@@ -61,6 +64,15 @@ public class MainMenu {
         System.out.println("[6] - initialize repo");
     }
     public static void credits(){
-        System.out.println("Here credits");
+        try {
+            Scanner logoScanner = new Scanner(new BufferedReader(new FileReader("credits.txt")));
+            while (logoScanner.hasNextLine()){
+                String line = logoScanner.nextLine();
+                System.out.println(line);
+            }
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
     }
 }
