@@ -20,6 +20,7 @@ public class MainMenu {
         Directories.directoryInit();
         printInstructions();
         while (!quit){
+            System.out.println("\nYou are in the Main menu.");
             System.out.println("Choose what to do:");
             String choice = scanner.nextLine();
             switch (choice){
