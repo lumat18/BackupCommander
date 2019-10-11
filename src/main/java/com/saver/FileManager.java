@@ -1,5 +1,6 @@
 package com.saver;
 
+import com.Threads.CopyMessage;
 import com.repository.Directories;
 import com.repository.RepoManager;
 import org.apache.commons.io.FileUtils;
@@ -39,7 +40,10 @@ public class FileManager {
                 }
             }
         };
+        CopyMessage copyMessage = new CopyMessage();
+        copyMessage.start();
         FileUtils.copyDirectory(srcFile,dstFile,repoFilter);
+        copyMessage.stop();
     }
     public static void clearDir(File currentVersion, String repoDir){
         for (File file: currentVersion.listFiles()) {

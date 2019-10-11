@@ -63,11 +63,11 @@ public class BackupLoader {
     private static boolean recallBackup(String hashcode){
         for (Log log:storedBackups) {
             if (log.getHashcode().equalsIgnoreCase(hashcode)){
-                File chosenBackupLocation = new File(Directories.getRepoDir() +hashcode);
+                File chosenBackupLocation = new File(Directories.getRepoDir() + "/" + hashcode);
                 File currentVersionLocation = new File(Directories.getWorkingDir());
                 try {
                     FileManager.clearDir(currentVersionLocation,Directories.getRepoDir());
-                    FileManager.copyDir(chosenBackupLocation,currentVersionLocation,null);
+                    FileManager.copyDir(chosenBackupLocation,currentVersionLocation,"");
                     return true;
                 } catch (IOException e) {
                     e.printStackTrace();
