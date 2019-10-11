@@ -1,10 +1,13 @@
 package com.loader;
 
 import com.log.Log;
+import com.log.LogManager;
 import com.log.LogPrinter;
 
+import com.repository.Directories;
 import com.repository.Repo;
 import com.repository.RepoManager;
+import com.saver.FileManager;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,20 +27,22 @@ import java.util.stream.Collectors;
 public class BackupLoader {
     private static Set<Log> storedBackups = new HashSet<>();
 
-
     public static void chooseBackup(){
         storedBackups=new HashSet<Log>();
         createBackupSet();
-        //printExistingBackups();
+        printExistingBackups();
         Scanner scanner = new Scanner(System.in);
-        System.out.println("please enter the hashcode of the chosen backup");
-        recallBackup(scanner.nextLine());
+        System.out.println("Please enter the hashcode of the chosen backup");
+        String choice = scanner.nextLine();
+        System.out.println("Do you want to store existing version? [y/n]");
+        LogManager.commitBackupVersion();
+        recallBackup(choice);
     }
     public static void printExistingBackups(){
         LogPrinter.printLog();
     }
     private static void createBackupSet(){
-        String logPath = "C:\\Users\\bartm\\OneDrive\\Documents\\IntelijiProjects\\BackupCommander\\log.txt";
+        String logPath = Directories.getRepoDir()+"/log.txt";
         File logs = new File(logPath);
         try(Scanner scanner = new Scanner(new BufferedReader(new FileReader(logPath)))){
             scanner.useDelimiter(";");  //here we set the delimiter
@@ -55,23 +60,20 @@ public class BackupLoader {
             System.out.println("Exception found while reading in backups");
         }
     }
-    private static void recallBackup(String hashcode){
+    private static boolean recallBackup(String hashcode){
         for (Log log:storedBackups) {
             if (log.getHashcode().equalsIgnoreCase(hashcode)){
-                Path chosenBackupLocation = Path.of("C:\\Users\\bartm\\OneDrive\\Documents\\IntelijiProjects\\BackupCommander\\.repo\\"+hashcode);
-                Path currentVersionLocation = Path.of("C:\\Users\\bartm\\OneDrive\\Documents\\IntelijiProjects\\BackupCommander\\currentVersion");
+                File chosenBackupLocation = new File(Directories.getRepoDir() +hashcode);
+                File currentVersionLocation = new File(Directories.getWorkingDir());
                 try {
-                    copyDirectory(chosenBackupLocation,currentVersionLocation);
+                    FileManager.clearDir(currentVersionLocation,Directories.getRepoDir());
+                    FileManager.copyDir(chosenBackupLocation,currentVersionLocation,null);
+                    return true;
                 } catch (IOException e) {
                     e.printStackTrace();
+                    return false;
                 }
             }
-        }
-    }
-    private static void copyDirectory(Path source, Path destination) throws IOException {
-        List<Path> files = Files.walk(source).collect(Collectors.toList());
-        for (Path file:files) {
-            Files.copy(file, destination.resolve(source.relativize(file)),StandardCopyOption.REPLACE_EXISTING);
-        }
+        }return false;
     }
 }

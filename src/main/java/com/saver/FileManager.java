@@ -41,4 +41,14 @@ public class FileManager {
         };
         FileUtils.copyDirectory(srcFile,dstFile,repoFilter);
     }
+    public static void clearDir(File currentVersion, String repoDir){
+        for (File file: currentVersion.listFiles()) {
+            if(file.getPath().equalsIgnoreCase(repoDir)) {
+                //do nothing
+            } else {
+                //delete file
+                file.delete();
+            }
+        }
+    }
 }

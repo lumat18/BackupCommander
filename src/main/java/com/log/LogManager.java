@@ -16,7 +16,7 @@ public class LogManager {
     private static Scanner scanner = new Scanner(System.in);
 
     public static void commitBackupVersion() {
-        System.out.println("Would you like to create new backup? [Y/N]");
+
         boolean finish = false;
         while (!finish) {
             switch (scanner.nextLine().toLowerCase()) {
