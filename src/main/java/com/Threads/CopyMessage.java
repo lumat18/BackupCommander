@@ -17,10 +17,18 @@ public class CopyMessage implements Runnable {
     @Override
     public void run() {
         running.set(true);
+        System.out.print("Copying files");
+        int i = 0;
         while(running.get()){
             try{
-                System.out.println("Copying files...");
-                Thread.sleep(8000);
+                i++;
+                if(i%4!=0) {
+                    System.out.print(".");
+                }
+                else{
+                    System.out.print("\b\b\b");
+                }
+                Thread.sleep(1000);
             }
             catch (InterruptedException e){
                 Thread.currentThread().interrupt();

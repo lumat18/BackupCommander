@@ -25,7 +25,6 @@ public class LogManager {
                     finish=true;
                     break;
                 case "n":
-                    System.out.println("Going back to main menu");
                     finish = true;
                     break;
                 default:
@@ -55,15 +54,12 @@ public class LogManager {
     }
 
     private static void saveLog(String logPath, Log log){
-        CopyMessage copyMessage = new CopyMessage();
         try {
             Writer writer = new BufferedWriter(new FileWriter(logPath, true));
             writer.append(log.toString());
             writer.close();
-            copyMessage.start();
             FileManager.fileSaver(log.getHashcode());
-            copyMessage.stop();
-            System.out.println("New backup version created");
+            System.out.println("\nNew backup version created");
         } catch (IOException e) {
             e.printStackTrace();
         }
