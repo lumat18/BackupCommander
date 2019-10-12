@@ -59,7 +59,7 @@ public class LogManager {
             writer.append(log.toString());
             writer.close();
             FileManager.fileSaver(log.getHashcode());
-            System.out.println("New backup version created");
+            System.out.println("\nNew backup version created");
         } catch (IOException e) {
             e.printStackTrace();
         }
