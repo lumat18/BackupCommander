@@ -55,7 +55,7 @@ public class MainMenu {
         }
     }
     public static void printInstructions(){
-        System.out.println("Availible options:");
+        System.out.println("Available options:");
         System.out.println("[1] - print instructions");
         System.out.println("[2] - initialize repo");
         System.out.println("[3] - create backup version");
@@ -63,6 +63,9 @@ public class MainMenu {
         System.out.println("[5] - print backup log");
         System.out.println("[6] - credits");
         System.out.println("[0] - quit");
+    }
+    public static String title(){
+        return "Backup Commander GUI v1.0";
     }
     public static void credits(){
         try {
