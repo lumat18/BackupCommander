@@ -15,8 +15,7 @@ public class StartUpFX extends Application{
         Image image = new Image(inputStream);
         primaryStage.getIcons().add(image);
 
-        Group group = new Group();
-        Scene scene = new Scene(group, 640, 480);
+        Scene scene = new Scene(MainMenuFX.getGroup(primaryStage), 640, 480);
 
         primaryStage.setTitle(MainMenu.title());
         primaryStage.setScene(scene);

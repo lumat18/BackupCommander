@@ -8,6 +8,7 @@ import com.saver.FileManager;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class LogManager {
@@ -34,8 +35,9 @@ public class LogManager {
     }
 
     private static void logExistOrCreateFile(String repo) {
-        Path repoPath = Path.of(repo);
-        Path logPath = Path.of(repo + "\\log.txt");
+        Path repoPath = Paths.get(repo);
+        Path logPath = Paths.get(repo + "\\log.txt");
+
         if (repoExist(repoPath)) {
             if (logFileExist(logPath)) {
                 saveLog(repo+"\\log.txt", new Log());

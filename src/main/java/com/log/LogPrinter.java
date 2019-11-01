@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -16,7 +17,7 @@ public class LogPrinter {
 
     private static  List<String> log = new ArrayList<>();
     private static Scanner scanner = new Scanner(System.in);
-    private static Path repoPath = Path.of(Directories.getRepoDir());
+    private static Path repoPath = Paths.get(Directories.getRepoDir());
 
     public static void printLog() {
         boolean finish = false;
@@ -55,7 +56,7 @@ public class LogPrinter {
     }
 
     private static List<String> readLogFile(Path repoPath) {
-        Path logPath = Path.of(repoPath.toString()+"\\log.txt");
+        Path logPath = Paths.get(repoPath.toString()+"\\log.txt");
         if(repoExist(repoPath)){
             if(logFileExist(logPath)){
                 try {
