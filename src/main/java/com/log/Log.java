@@ -20,21 +20,19 @@ public class Log {
         this.hashcode = hashcode;
     }
 
-    public Log() {
+    public Log(String user, String description) {
         setHashcode();
         setDateTime();
-        setUser();
-        setDescription();
+        setUser(user);
+        setDescription(description);
     }
 
-    private void setUser() {
-        System.out.println("Enter user name:");
-        this.user = scanner.nextLine();
+    private void setUser(String user) {
+        this.user = user;
     }
 
-    private void setDescription() {
-        System.out.println("Enter backup description:");
-        this.description = scanner.nextLine();
+    private void setDescription(String description) {
+        this.description = description;
     }
 
     private void setDateTime() {

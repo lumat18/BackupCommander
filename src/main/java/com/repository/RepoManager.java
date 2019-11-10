@@ -10,25 +10,27 @@ public class RepoManager {
     //    Maybe inlcude list of repos? To be discussed.
     //    List<Repo> repoList = new ArrayList<>();
 
-    public static void repoInit() {
+    public static boolean repoInit() {
         Path directoryPath;
-
         try {
             directoryPath = Paths.get(Directories.getRepoDir());
             repo = new Repo(directoryPath);
-            existsOrCreate(repo.getDirectoryPath());
+            return existsOrCreate(repo.getDirectoryPath());
         } catch (IOException e) {
             e.printStackTrace(); //To be improved in future release.
+            return true;
         }
     }
 
-    private static void existsOrCreate(Path path) throws IOException {
+    private static boolean existsOrCreate(Path path) throws IOException {
         //Throws exception if a path parent directory does not exist. To be improved in future release.
         if(Files.exists(path)){
-            System.out.println("Repository already exists.");
+//            System.out.println("Repository already exists.");
+            return true;
         } else {
-            System.out.println("Creating a new repository in the folder .repo.");
+//            System.out.println("Creating a new repository in the folder .repo.");
             Files.createDirectory(path);
+            return false;
         }
     }
 }

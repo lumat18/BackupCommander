@@ -22,7 +22,7 @@ public class LogManager {
         while (!finish) {
             switch (scanner.nextLine().toLowerCase()) {
                 case "y":
-                    logExistOrCreateFile(Directories.getRepoDir());
+//                    logExistOrCreateFile(Directories.getRepoDir());
                     finish=true;
                     break;
                 case "n":
@@ -34,13 +34,13 @@ public class LogManager {
         }
     }
 
-    private static void logExistOrCreateFile(String repo) {
+    public static void logExistOrCreateFile(String repo, String username, String description) {
         Path repoPath = Paths.get(repo);
         Path logPath = Paths.get(repo + "\\log.txt");
 
         if (repoExist(repoPath)) {
             if (logFileExist(logPath)) {
-                saveLog(repo+"\\log.txt", new Log());
+                saveLog(repo + "\\log.txt", new Log(username, description));
             } else {
                 try {
                     Files.createFile(logPath);
@@ -48,7 +48,7 @@ public class LogManager {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                saveLog(repo+"\\log.txt", new Log());
+                saveLog(repo+"\\log.txt", new Log(username, description));
             }
         } else {
             System.out.println("You have to create repo first");
@@ -67,7 +67,7 @@ public class LogManager {
         }
     }
 
-    private static boolean logFileExist(Path repoPath) {
+    public static boolean logFileExist(Path repoPath) {
         return Files.exists(repoPath);
     }
 

@@ -11,9 +11,10 @@ import java.io.FileInputStream;
 public class StartUpFX extends Application{
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FileInputStream inputStream = new FileInputStream("horse_icon.jpg");
-        Image image = new Image(inputStream);
-        primaryStage.getIcons().add(image);
+//        FileInputStream inputStream = new FileInputStream("horse_icon.jpg");
+//        Image image = new Image(inputStream);
+        primaryStage.getIcons().add(MainMenuFX.icon());
+        primaryStage.setResizable(false);
 
         Scene scene = new Scene(MainMenuFX.getGroup(primaryStage), 640, 480);
 
