@@ -15,7 +15,8 @@ import java.util.Scanner;
 public class LogPrinter {
     //this class is printing the content of the log.txt file that is in the .repo directory
 
-    private static  List<String> log = new ArrayList<>();
+    public static List<String> log = new ArrayList<>();
+    public static List<Log> logsList = new ArrayList<>();
     private static Scanner scanner = new Scanner(System.in);
     private static Path repoPath = Paths.get(Directories.getRepoDir());
 
@@ -39,8 +40,8 @@ public class LogPrinter {
         }
         log.clear();
     }
-
-    private static void printFullLog() {
+    //hashcode, date, user, description
+    public static void printFullLog() {
         log.stream().forEach(x-> {
             for (int i = 0; i < 4; i++) {
                 System.out.print(x.split(";")[i] + "  ");
@@ -48,17 +49,26 @@ public class LogPrinter {
             System.out.println();
         });
     }
-
+    public static List<Log> provideLogsFX(){
+        log.stream().forEach(x-> {
+            String[] tempArrayList = new String[4];
+            for (int i = 0; i < 4; i++) {
+                tempArrayList[i] = x.split(";")[i];
+            }
+            logsList.add(new Log(tempArrayList[0], tempArrayList[1], tempArrayList[2], tempArrayList[3]));
+        });
+        return logsList;
+    }
     private static void printSimpleLog() {
         log.stream().forEach(x->{
             System.out.println(x.split(";")[0] + " - " + x.split(";")[3]);
         });
     }
 
-    private static List<String> readLogFile(Path repoPath) {
+    public static List<String> readLogFile(Path repoPath) {
         Path logPath = Paths.get(repoPath.toString()+"\\log.txt");
-        if(repoExist(repoPath)){
-            if(logFileExist(logPath)){
+//        if(repoExist(repoPath)){
+//            if(logFileExist(logPath)){
                 try {
                     BufferedReader bufferedReader = new BufferedReader(new FileReader(String.valueOf(logPath)));
                     String line = bufferedReader.readLine();
@@ -69,16 +79,16 @@ public class LogPrinter {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }else {
-                System.out.println("You have to create initial log first");
-            }
-        }else{
-            System.out.println("You have to create repo first");
-        }
+//            }else {
+//                System.out.println("You have to create initial log first");
+//            }
+//        }else{
+//            System.out.println("You have to create repo first");
+//        }
         return null;
     }
 
-    private static boolean logFileExist(Path repoPath) {
+    public static boolean logFileExist(Path repoPath) {
         return Files.exists(repoPath);
     }
 

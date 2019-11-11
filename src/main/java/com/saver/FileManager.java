@@ -29,15 +29,12 @@ public class FileManager {
 
     public static void copyDir(File srcFile, File dstFile, String srcDir) throws IOException {
         File repoDir = new File(srcDir);
-        FileFilter repoFilter = new FileFilter() {
-            @Override
-            public boolean accept(File pathname) {
-                if(pathname.equals(repoDir)){
-                    return false;
-                }
-                else {
-                    return true;
-                }
+        FileFilter repoFilter = pathname -> {
+            if(pathname.equals(repoDir)){
+                return false;
+            }
+            else {
+                return true;
             }
         };
         CopyMessage copyMessage = new CopyMessage();

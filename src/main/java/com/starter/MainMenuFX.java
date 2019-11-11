@@ -1,16 +1,24 @@
 package com.starter;
 
+import com.log.Log;
 import com.log.LogManager;
+import com.log.LogPrinter;
 import com.repository.Directories;
 import com.repository.RepoManager;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -20,13 +28,29 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MainMenuFX {
+
     public static GridPane menu(Stage stage){
         Button workingDirectoryInitializer = new Button("Work Directory");
-        Text nameLabel = new Text("Working directory: <none>");
+        Text workDirectoryText = new Text("Working directory: <none>");
+        Text repoDirectoryText = new Text("Repo directory: <none>");
         Text repoStatus = new Text("");
+
+        Button repoInitializer = new Button("Initialize Repo");
+        Button commitBackup = new Button("Commit Backup");
+        commitBackup.setDisable(true);
+
+        Text logStatus = new Text("");
+        Button readLog = new Button("Read Log");
+        readLog.setDisable(true);
 
         workingDirectoryInitializer.setOnAction(x -> {
             DirectoryChooser chooser = new DirectoryChooser();
@@ -37,31 +61,52 @@ public class MainMenuFX {
 
             if (selectedDirectory != null) {
                 Directories.setWorkingDir(selectedDirectory.getPath());
-                Directories.setRepoDir(Directories.getWorkingDir() + "/.repo");
-                nameLabel.setText(Directories.getWorkingDir());
+                Directories.setRepoDir(Directories.getWorkingDir() + "\\.repo");
+                workDirectoryText.setText(Directories.getWorkingDir());
                 repoStatus.setText("");
+//                readLog.setDisable(true);
             }
         });
 
-        Button repoInitializer = new Button("Initialize Repo");
+//        Button repoInitializer = new Button("Initialize Repo");
         repoInitializer.setOnAction(x-> {
             if(Directories.getRepoDir() != null){
-                RepoManager.repoInit();
                 if(RepoManager.repoInit()){
                     repoStatus.setText("Repository already exists.");
                 }
-                if(!RepoManager.repoInit()){
+                else{
+                    RepoManager.repoInit();
                     repoStatus.setText("Creating a new repository in the folder .repo.");
                 }
+                repoDirectoryText.setText(Directories.getRepoDir());
+                commitBackup.setDisable(false);
+                readLog.setDisable(false);
             }
             else{
                 repoStatus.setText("No work directory selected.");
             }
         });
 
-        Button commitBackup = new Button("Commit Backup");
+//        Button commitBackup = new Button("Commit Backup");
         commitBackup.setOnAction(x-> {
             commitBackupConfirm();
+            repoStatus.setText("");
+        });
+
+        readLog.setOnAction(x -> {
+            Path repoPath = Paths.get(Directories.getRepoDir());
+            Path logPath = Paths.get(repoPath.toString()+"\\log.txt");
+
+            if(!LogPrinter.logFileExist(logPath)){
+                logStatus.setText("You have to create initial log first");
+            }
+            else {
+                logStatus.setText("");
+                LogPrinter.readLogFile(repoPath);
+                showLogsWindow();
+//                LogPrinter.printFullLog();
+                LogPrinter.log.clear();
+            }
         });
 
         GridPane gridPane = new GridPane();
@@ -71,11 +116,14 @@ public class MainMenuFX {
         gridPane.setHgap(5);
         gridPane.setAlignment(Pos.CENTER);
 
-        gridPane.add(nameLabel, 0, 0);
+        gridPane.add(workDirectoryText, 0, 6);
+        gridPane.add(repoDirectoryText, 0, 7);
         gridPane.add(workingDirectoryInitializer, 1, 0);
         gridPane.add(repoStatus, 0,1);
         gridPane.add(repoInitializer, 1,1);
         gridPane.add(commitBackup, 1 ,2);
+        gridPane.add(logStatus, 0 ,3);
+        gridPane.add(readLog, 1 ,3);
         return gridPane;
     }
     public static void commitBackupConfirm (){
@@ -142,13 +190,10 @@ public class MainMenuFX {
         Button cancel = new Button("Cancel");
 
         commit.setOnAction(x -> {
-            String repoDir = Directories.getRepoDir();
-            System.out.println(repoDir);
-
             usernameWarning.setText("");
             descriptionWarning.setText("");
             String usernameString = usernameFill.getText();
-            String descriptionString = descriptionFill.getText();
+            String descriptionString = descriptionFill.getText().replaceAll("\n", " ");
             if(usernameString.isEmpty()){
                 usernameWarning.setText("This field must be filled!");
             }
@@ -185,6 +230,39 @@ public class MainMenuFX {
         logManagerWindow.setScene(scene);
         logManagerWindow.show();
     }
+    public static void showLogsWindow(){
+        Stage showLogsWindow = new Stage();
+        showLogsWindow.initModality(Modality.APPLICATION_MODAL);
+        showLogsWindow.setTitle("Pick a log to show");
+        try {
+            showLogsWindow.getIcons().add(MainMenuFX.icon());
+        }
+        catch (Exception e){}
+
+        List<Log> logsList = LogPrinter.provideLogsFX();
+        Map<String, Log> logsMap = new HashMap<>();
+        logsList.stream().forEach(x -> logsMap.put(x.getDateTime(), x));
+
+        ObservableList<String> logDates = FXCollections.observableArrayList(logsMap.keySet());
+
+        ListView<String> logDatesList = new ListView<String>(logDates);
+        logDatesList.setPrefSize(300,250);
+
+        GridPane gridPane = new GridPane();
+        gridPane.setMinSize(350, 350);
+        gridPane.setPadding(new Insets(10, 10, 10, 10));
+        gridPane.setVgap(5);
+        gridPane.setHgap(5);
+        gridPane.setAlignment(Pos.CENTER);
+
+        gridPane.add(logDatesList,0,0);
+
+        Group group = new Group(gridPane);
+        Scene scene = new Scene(group, 350, 350);
+        showLogsWindow.setScene(scene);
+        showLogsWindow.show();
+    }
+
     public static Group getGroup(Stage stage) {
         return new Group(menu(stage));
     }

@@ -41,7 +41,7 @@ public class Directories {
                     break;
                 } else {
                     //Maybe change this for a more optimal method like StringBuffer.append()?
-                    workingDirectory += temp + "/";
+                    workingDirectory += temp + "\\";
                 }
             } while (true);
             Directories.setWorkingDir(workingDirectory);
@@ -55,7 +55,7 @@ public class Directories {
 
                     workingDirectory = scanner.nextLine();
                     Directories.setWorkingDir(workingDirectory);
-                    workingDirectory += "/.repo";
+                    workingDirectory += "\\.repo";
                     Directories.setRepoDir(workingDirectory);
                     break;
                 } catch (Exception e) {

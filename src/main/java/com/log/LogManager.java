@@ -44,14 +44,12 @@ public class LogManager {
             } else {
                 try {
                     Files.createFile(logPath);
-                    System.out.println("New log file created");
+//                    System.out.println("New log file created");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 saveLog(repo+"\\log.txt", new Log(username, description));
             }
-        } else {
-            System.out.println("You have to create repo first");
         }
     }
 
@@ -61,7 +59,7 @@ public class LogManager {
             writer.append(log.toString());
             writer.close();
             FileManager.fileSaver(log.getHashcode());
-            System.out.println("\nNew backup version created");
+//            System.out.println("\nNew backup version created");
         } catch (IOException e) {
             e.printStackTrace();
         }

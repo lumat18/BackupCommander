@@ -36,7 +36,7 @@ public class Log {
     }
 
     private void setDateTime() {
-        this.dateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
+        this.dateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
     }
 
     private void setHashcode() {
@@ -44,6 +44,10 @@ public class Log {
         byte[] token = new byte[3];
         secureRandom.nextBytes(token);
         this.hashcode = new BigInteger(1, token).toString(16);
+    }
+
+    public String getDateTime() {
+        return dateTime;
     }
 
     public String getHashcode() {
