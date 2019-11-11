@@ -18,7 +18,7 @@ public class FileManager {
         String srcDirectory = Directories.getWorkingDir();
         
         File srcFile = new File(srcDirectory);
-        File dstFile = new File(workingDirectory + "/" + hashcode);
+        File dstFile = new File(workingDirectory + "\\" + hashcode);
 
         try {
             copyDir(srcFile, dstFile, workingDirectory);
@@ -37,10 +37,10 @@ public class FileManager {
                 return true;
             }
         };
-        CopyMessage copyMessage = new CopyMessage();
-        copyMessage.start();
+//        CopyMessage copyMessage = new CopyMessage();
+//        copyMessage.start();
         FileUtils.copyDirectory(srcFile,dstFile,repoFilter);
-        copyMessage.stop();
+//        copyMessage.stop();
     }
     public static void clearDir(File currentVersion, String repoDir){
         for (File file: currentVersion.listFiles()) {

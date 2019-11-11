@@ -5,6 +5,7 @@ import com.log.LogManager;
 import com.log.LogPrinter;
 import com.repository.Directories;
 import com.repository.RepoManager;
+import com.saver.FileManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -12,22 +13,22 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -45,11 +46,11 @@ public class MainMenuFX {
         Text repoStatus = new Text("");
 
         Button repoInitializer = new Button("Initialize Repo");
-        Button commitBackup = new Button("Commit Backup");
+        Button commitBackup = new Button("Create Backup");
         commitBackup.setDisable(true);
 
         Text logStatus = new Text("");
-        Button readLog = new Button("Read Log");
+        Button readLog = new Button("Load Backup");
         readLog.setDisable(true);
 
         workingDirectoryInitializer.setOnAction(x -> {
@@ -130,13 +131,13 @@ public class MainMenuFX {
         Stage stageCommitBackupConfirmation = new Stage();
         stageCommitBackupConfirmation.initModality(Modality.APPLICATION_MODAL);
         stageCommitBackupConfirmation.setResizable(false);
-        stageCommitBackupConfirmation.setTitle("Do you want to commit new backup?");
+        stageCommitBackupConfirmation.setTitle("Do you want to create new backup?");
         try {
             stageCommitBackupConfirmation.getIcons().add(MainMenuFX.icon());
         }
         catch (Exception e){}
 
-        Text confirmQuery = new Text("Do you really want to commit backup?");
+        Text confirmQuery = new Text("Do you really want to create backup?");
         Button yes = new Button("Yes");
         Button no = new Button("No");
 
@@ -163,6 +164,49 @@ public class MainMenuFX {
         Scene scene = new Scene(group, 350, 100);
         stageCommitBackupConfirmation.setScene(scene);
         stageCommitBackupConfirmation.show();
+    }
+    public static void loadBackupConfirm (String username, String hashcode){
+        Stage stageLoadBackupConfirmation = new Stage();
+        stageLoadBackupConfirmation.initModality(Modality.APPLICATION_MODAL);
+        stageLoadBackupConfirmation.setResizable(false);
+        stageLoadBackupConfirmation.setTitle("Storing existing version?");
+        try {
+            stageLoadBackupConfirmation.getIcons().add(MainMenuFX.icon());
+        }
+        catch (Exception e){}
+
+        Text confirmQuery = new Text("Do you want to store existing version?");
+        Button yes = new Button("Yes");
+        Button no = new Button("No");
+
+        yes.setOnAction(x -> {
+//            logManagerWindow();
+            String usernameString = username;
+            String descriptionString = "Backup created while recalling previous version"; //it could be named better
+            LogManager.logExistOrCreateFile(Directories.getRepoDir(),usernameString, descriptionString);
+            recallBackupInit(hashcode);
+            stageLoadBackupConfirmation.close();
+        });
+        no.setOnAction(x -> {
+            recallBackupInit(hashcode);
+            stageLoadBackupConfirmation.close();
+        });
+
+        GridPane gridPane = new GridPane();
+        gridPane.setMinSize(350, 100);
+        gridPane.setPadding(new Insets(10, 10, 10, 10));
+        gridPane.setVgap(5);
+        gridPane.setHgap(5);
+        gridPane.setAlignment(Pos.CENTER);
+
+        gridPane.add(confirmQuery, 0 , 0);
+        gridPane.add(yes,0,1);
+        gridPane.add(no, 1,1);
+
+        Group group = new Group(gridPane);
+        Scene scene = new Scene(group, 350, 100);
+        stageLoadBackupConfirmation.setScene(scene);
+        stageLoadBackupConfirmation.show();
     }
     public static void logManagerWindow(){
         Stage logManagerWindow = new Stage();
@@ -205,9 +249,7 @@ public class MainMenuFX {
                 logManagerWindow.close();
             }
         });
-        cancel.setOnAction(x -> {
-            logManagerWindow.close();
-        });
+        cancel.setOnAction(x -> logManagerWindow.close());
 
         GridPane gridPane = new GridPane();
         gridPane.setMinSize(350, 250);
@@ -239,6 +281,21 @@ public class MainMenuFX {
         }
         catch (Exception e){}
 
+        Text usernameTitle = new Text("Username:");
+        Text username = new Text("");
+        Text descriptionTitle = new Text("Description:");
+        Label description = new Label("");
+//        description.setWrappingWidth(190);
+        description.setMaxWidth(190);
+        description.setWrapText(true);
+        description.setAlignment(Pos.TOP_LEFT);
+
+//        Text hashcodeTitle = new Text("Hashcode:");
+//        Text hashcode = new Text("");
+        Button recall = new Button("Recall");
+        recall.setDisable(true);
+        Button cancel = new Button("Cancel");
+
         List<Log> logsList = LogPrinter.provideLogsFX();
         Map<String, Log> logsMap = new HashMap<>();
         logsList.stream().forEach(x -> logsMap.put(x.getDateTime(), x));
@@ -246,23 +303,87 @@ public class MainMenuFX {
         ObservableList<String> logDates = FXCollections.observableArrayList(logsMap.keySet());
 
         ListView<String> logDatesList = new ListView<String>(logDates);
-        logDatesList.setPrefSize(300,250);
+        logDatesList.setMaxSize(190,250);
+
+        logDatesList.setOnMouseClicked(event -> {
+            recall.setDisable(false);
+            Log tempLog = logsMap.get(logDatesList.getSelectionModel().getSelectedItem());
+            username.setText(tempLog.getUser());
+            description.setText(tempLog.getDescription());
+            recall.setOnAction(x -> {
+                loadBackupConfirm(tempLog.getUser(), tempLog.getHashcode());
+
+                showLogsWindow.close();
+            });
+//            System.out.println("clicked on " + logDatesList.getSelectionModel().getSelectedItem());
+        });
+
+        cancel.setOnAction(x -> showLogsWindow.close());
 
         GridPane gridPane = new GridPane();
-        gridPane.setMinSize(350, 350);
+        gridPane.setMinSize(300, 400);
         gridPane.setPadding(new Insets(10, 10, 10, 10));
         gridPane.setVgap(5);
         gridPane.setHgap(5);
         gridPane.setAlignment(Pos.CENTER);
 
-        gridPane.add(logDatesList,0,0);
+        gridPane.add(logDatesList,1,0);
+        gridPane.add(recall,0,1);
+        gridPane.add(cancel,1,1);
+        gridPane.add(usernameTitle,0,2);
+        gridPane.add(username,1,2);
+        gridPane.add(descriptionTitle,0,3);
+        gridPane.add(description,1,3);
+//        gridPane.add(hashcodeTitle,0,4);
+//        gridPane.add(hashcode,1,4);
 
         Group group = new Group(gridPane);
-        Scene scene = new Scene(group, 350, 350);
+        Scene scene = new Scene(group, 300, 400);
         showLogsWindow.setScene(scene);
         showLogsWindow.show();
     }
+    public static void recallBackupInit(String hashcode){
+        File chosenBackupLocation = new File(Directories.getRepoDir() + "\\" + hashcode);
+        File currentVersionLocation = new File(Directories.getWorkingDir());
+        try {
+            FileManager.clearDir(currentVersionLocation,Directories.getRepoDir());
+            FileManager.copyDir(chosenBackupLocation,currentVersionLocation,"");
+        } catch (IOException e) {
+            recallBackupError();
+        }
+    }
+    public static void recallBackupError(){
+        Stage recallBackupError = new Stage();
+        recallBackupError.initModality(Modality.APPLICATION_MODAL);
+        recallBackupError.setResizable(false);
+        recallBackupError.setTitle("Error!");
+        try {
+            recallBackupError.getIcons().add(MainMenuFX.icon());
+        }
+        catch (Exception e){}
 
+        Text confirmQuery = new Text("Something went wrong");
+        Button okay = new Button("Okay");
+
+        okay.setOnAction(x -> {
+            recallBackupError.close();
+        });
+
+        GridPane gridPane = new GridPane();
+        gridPane.setMinSize(250, 100);
+        gridPane.setPadding(new Insets(10, 10, 10, 10));
+        gridPane.setVgap(5);
+        gridPane.setHgap(5);
+        gridPane.setAlignment(Pos.CENTER);
+
+        gridPane.add(confirmQuery, 0 , 0);
+        gridPane.add(okay,0,1);
+
+        Group group = new Group(gridPane);
+        Scene scene = new Scene(group, 250, 100);
+        recallBackupError.setScene(scene);
+        recallBackupError.show();
+    }
     public static Group getGroup(Stage stage) {
         return new Group(menu(stage));
     }

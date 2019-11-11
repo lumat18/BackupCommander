@@ -54,6 +54,14 @@ public class Log {
         return hashcode;
     }
 
+    public String getUser() {
+        return user;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
     @Override
     public String toString() {
         return this.hashcode + ";" +
